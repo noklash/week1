@@ -1,146 +1,129 @@
-let text1 = document.getElementById("textEl")
-let list = document.getElementById("listEl")
-let btn = document.getElementById("btnEl")
+// IMPORT RAW DATA
+import data from "./data.js";
+
+// TARGETS HTML ELEMENTS RENDERED ON THE DOM
 let select = document.getElementById("selectedEl")
 let total = document.getElementById("totalEl")
 let main = document.getElementById("mainEl")
 let side = document.getElementById("sidEl")
 let prot = document.getElementById("proteinEl")
+// let input = document.getElementById("inputEl")
 
-const names = ["mike", "john", "bright", "favour"]
 
-const name = ""
+// FILTERS IMPORTED DATA BASED ON TYPE
+const filterByType = (type) => data.filter((food) => food.type === type )
 
-const mainFood = [
-    { name: "rice", price: 1500 },
-    { name: "pasta", price: 3200 },
-    { name: "noodles", price: 1200 },
-    { name: "yam", price: 1100 },
-    { name: "potatoes", price: 700 },
-    { name: "garri", price: 400 },
-    { name: "soup", price: 1670 },
-    { name: "beans", price: 790 },
-    { name: "corn", price: 559 },
-];
-
-const sideTops = [
-    { name: "moi-moi", price: 300 },
-    { name: "corn", price: 450 },
-    { name: "coleslaw", price: 800 },
-    { name: "vegetables", price: 300 },
-    { name: "eggSauce", price: 560 },
-    { name: "plantain", price: 120 },
-];
-
-const protein = [
-    { name: "beef", price: 1765 },
-    { name: "chicken", price: 2500 },
-    { name: "turkey", price: 4500 },
-    { name: "fish", price: 3570 },
-];
+const mainFood = filterByType("mn");
+const sideTops = filterByType("sd")
+const protein = filterByType("pt")
 
 
 
-
+let totalPrice;
 let selected = []
 
-
-const reRender = () => {
+// RENDERS THE COMPONENT TO UPDATE CHANGES IN REAL-TIME
+const reRender = (arr) => {
+    // CLEARS PREVIOUS VALUES 
+    select.innerHTML = ""
+    total.innerHTML = ""
     
-    selected?.forEach( food => {
+    // LOOPS THROUGH THE ARRAY PASSED AS ARGUMENT
+    arr?.forEach( (food, i) => {
+        // CREATES A HTML  ELEMENTS
         const foodEl = document.createElement("li")
         const foodPriceEl = document.createElement("span")
+        // RENDERS THE VALUES IN THE ARRAY ON THE UI
         foodPriceEl.innerHTML = food.price;
-        foodEl.innerHTML = food.name 
+        foodEl.innerHTML = food.name
+        // NESTS THE NEW ELEMENTS IN AN EXISTING ONE 
         foodEl.appendChild(foodPriceEl)
         select.appendChild(foodEl)
+
+    // REMOVES A SELECTED ITEM FROM LIST
+        const removeFood = (e) => {
+            e.preventDefault(); 
+            selected = selected.filter((food) => food !== selected[i])
+            reRender(selected)
+        }
+
+        foodEl.addEventListener("click", removeFood)
     });
-    
+
+    // SUMS THE PRICES OF ITEMS IN THE ARRAY
+    totalPrice = arr.reduce((sum, food) => sum + food.price, 0)
+
+    // FORMATS THE VALUE TO DECIMAL AND CURRENCY FORMAT WITH COMMAS
+    const formattedTotalPrice = totalPrice.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+
+    // RENDERS THE THE FORMATTED VALUE ON THE UI
+    total.innerHTML = formattedTotalPrice
+
 }
 
 
-
-mainFood.map( (food, i ) => {
+// LOOPS THROUGH THE MAINFOOD ARRAY AND RENDERS ON THE DOM
+mainFood.forEach( (food, i ) => {
     const foodEl = document.createElement("li")
     const foodPriceEl = document.createElement("span")
     foodPriceEl.innerHTML = food.price;
     foodEl.innerHTML = food.name 
     foodEl.appendChild(foodPriceEl)
+    // ADDS A NEW NEW ITEM ON BUTTON CLICK
     const handleClick = (e) => {
-        // let empty = []
+        // PREVENTS PAGE RELOAD
         e.preventDefault(); 
+        // ADDS A NEW ITEM TO THE SELECTED ARRAY
         selected.push(mainFood[i])
-        reRender()
-        // console.log(selected)
+        // CALLS THE FUNCTION TO TRIGGER A RE-RENDER TO UPDATE NEW VALUES
+        reRender(selected)
+        
     }
     foodEl.addEventListener("click", handleClick)
     main.appendChild(foodEl)
 });
 
-sideTops.map( (food, i)=> {
+sideTops.forEach( (food, i)=> {
     const foodEl = document.createElement("li")
     const foodPriceEl = document.createElement("span")
     foodPriceEl.innerHTML = food.price;
     foodEl.innerHTML = food.name 
     foodEl.appendChild(foodPriceEl)
     const handleClick = (e) => {
-        let empty = [...selected]
         e.preventDefault(); 
-        // empty.push(sideTops[i])
         selected.push(sideTops[i])
-        reRender()
-        console.log(selected)
+        reRender(selected)
+       
     }
     foodEl.addEventListener("click", handleClick)
     side.appendChild(foodEl)
 })
 
-protein.map( (food, i) => {
+protein.forEach( (food, i) => {
     const foodEl = document.createElement("li")
     const foodPriceEl = document.createElement("span")
     foodPriceEl.innerHTML = food.price;
     foodEl.innerHTML = food.name 
     foodEl.appendChild(foodPriceEl)
+
     const handleClick = (e) => {
-        // let empty = []
         e.preventDefault(); 
-        // empty.push(protein[i])
         selected.push(protein[i])
-        reRender()
-        console.log(selected)
-    }
+        reRender( selected);
+    };
+
     foodEl.addEventListener("click", handleClick)
     prot.appendChild(foodEl)
+    
 })
 
-reRender()
-
-
-
-let state = false;
-
-const setState = () => state = !state
-
-const renderList = () => {
-    setState();
-    
-    if(state){
-        // let list = document.createElement('ul')
-        names.map( man  => {
-            const namesVal = document.createElement("li")
-                namesVal.innerHTML = man
-                const handleClick = () => alert(man)
-                namesVal.addEventListener("click", handleClick)
-            list.appendChild(namesVal)
-          
-        })
-    }else {
-        list.innerHTML = ""
-    }
-   
-}
 
 
 
 
-// btn.addEventListener("click", renderList);
+
