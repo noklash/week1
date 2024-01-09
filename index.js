@@ -13,6 +13,7 @@ let prot = document.getElementById("proteinEl")
 // FILTERS IMPORTED DATA BASED ON TYPE
 const filterByType = (type) => data.filter((food) => food.type === type )
 
+// CALLS THE FUNCTION IN VARIABLE DECLARATION, PASSING THE VALUE OF TYPE AS ARGUMENT
 const mainFood = filterByType("mn");
 const sideTops = filterByType("sd")
 const protein = filterByType("pt")
@@ -67,60 +68,34 @@ const reRender = (arr) => {
 }
 
 
-// LOOPS THROUGH THE MAINFOOD ARRAY AND RENDERS ON THE DOM
-mainFood.forEach( (food, i ) => {
-    const foodEl = document.createElement("li")
-    const foodPriceEl = document.createElement("span")
-    foodPriceEl.innerHTML = food.price;
-    foodEl.innerHTML = food.name 
-    foodEl.appendChild(foodPriceEl)
-    // ADDS A NEW NEW ITEM ON BUTTON CLICK
-    const handleClick = (e) => {
-        // PREVENTS PAGE RELOAD
-        e.preventDefault(); 
-        // ADDS A NEW ITEM TO THE SELECTED ARRAY
-        selected.push(mainFood[i])
-        // CALLS THE FUNCTION TO TRIGGER A RE-RENDER TO UPDATE NEW VALUES
-        reRender(selected)
-        
-    }
-    foodEl.addEventListener("click", handleClick)
-    main.appendChild(foodEl)
-});
+// RENDERS A CATEGORY, USING TYPE ARRAY AND DOM LOCATION (WHAT to render AND WHERE to render it)
+const renderType = (typeArr, renderDom ) => {
+    typeArr.forEach( (food, i ) => {
+        const foodEl = document.createElement("li")
+        const foodPriceEl = document.createElement("span")
+        foodPriceEl.innerHTML = food.price;
+        foodEl.innerHTML = food.name 
+        foodEl.appendChild(foodPriceEl)
+        // ADDS A NEW NEW ITEM ON BUTTON CLICK
+        const handleClick = (e) => {
+            // PREVENTS PAGE RELOAD
+            e.preventDefault(); 
+            // ADDS A NEW ITEM TO THE SELECTED ARRAY
+            selected.push(typeArr[i])
+            // CALLS THE FUNCTION TO TRIGGER A RE-RENDER TO UPDATE NEW VALUES
+            reRender(selected)
+            
+        }
+        foodEl.addEventListener("click", handleClick)
+        renderDom.appendChild(foodEl)
+    });
+}
 
-sideTops.forEach( (food, i)=> {
-    const foodEl = document.createElement("li")
-    const foodPriceEl = document.createElement("span")
-    foodPriceEl.innerHTML = food.price;
-    foodEl.innerHTML = food.name 
-    foodEl.appendChild(foodPriceEl)
-    const handleClick = (e) => {
-        e.preventDefault(); 
-        selected.push(sideTops[i])
-        reRender(selected)
-       
-    }
-    foodEl.addEventListener("click", handleClick)
-    side.appendChild(foodEl)
-})
+// CALLS THE FUNCTION WHICH RENDERS CATEGORIES
+renderType(mainFood, main);
+renderType(sideTops, side);
+renderType(protein, prot);
 
-protein.forEach( (food, i) => {
-    const foodEl = document.createElement("li")
-    const foodPriceEl = document.createElement("span")
-    foodPriceEl.innerHTML = food.price;
-    foodEl.innerHTML = food.name 
-    foodEl.appendChild(foodPriceEl)
-
-    const handleClick = (e) => {
-        e.preventDefault(); 
-        selected.push(protein[i])
-        reRender( selected);
-    };
-
-    foodEl.addEventListener("click", handleClick)
-    prot.appendChild(foodEl)
-    
-})
 
 
 
