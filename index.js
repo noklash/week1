@@ -42,11 +42,12 @@ const protein = [
 
 
 
+let selected = []
 
 
-
-const reRender = (arr) => {
-    arr?.map( food => {
+const reRender = () => {
+    
+    selected?.forEach( food => {
         const foodEl = document.createElement("li")
         const foodPriceEl = document.createElement("span")
         foodPriceEl.innerHTML = food.price;
@@ -57,7 +58,7 @@ const reRender = (arr) => {
     
 }
 
-const selected = 
+
 
 mainFood.map( (food, i ) => {
     const foodEl = document.createElement("li")
@@ -66,10 +67,10 @@ mainFood.map( (food, i ) => {
     foodEl.innerHTML = food.name 
     foodEl.appendChild(foodPriceEl)
     const handleClick = (e) => {
-        let empty = []
+        // let empty = []
         e.preventDefault(); 
-        empty.push(mainFood[i])
-        reRender(empty)
+        selected.push(mainFood[i])
+        reRender()
         // console.log(selected)
     }
     foodEl.addEventListener("click", handleClick)
@@ -83,11 +84,12 @@ sideTops.map( (food, i)=> {
     foodEl.innerHTML = food.name 
     foodEl.appendChild(foodPriceEl)
     const handleClick = (e) => {
-        let empty = []
+        let empty = [...selected]
         e.preventDefault(); 
-        empty.push(sideTops[i])
-        reRender(empty)
-        // console.log(selected)
+        // empty.push(sideTops[i])
+        selected.push(sideTops[i])
+        reRender()
+        console.log(selected)
     }
     foodEl.addEventListener("click", handleClick)
     side.appendChild(foodEl)
@@ -100,17 +102,18 @@ protein.map( (food, i) => {
     foodEl.innerHTML = food.name 
     foodEl.appendChild(foodPriceEl)
     const handleClick = (e) => {
-        let empty = []
+        // let empty = []
         e.preventDefault(); 
-        empty.push(protein[i])
-        reRender(empty)
-        // console.log(selected)
+        // empty.push(protein[i])
+        selected.push(protein[i])
+        reRender()
+        console.log(selected)
     }
     foodEl.addEventListener("click", handleClick)
     prot.appendChild(foodEl)
 })
 
-
+reRender()
 
 
 
