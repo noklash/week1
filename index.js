@@ -31,7 +31,7 @@ const reRender = (arr) => {
     
     // LOOPS THROUGH THE ARRAY PASSED AS ARGUMENT
     arr?.forEach( (food, i) => {
-        // CREATES A HTML  ELEMENTS
+        // CREATES A HTML  ELEMENT
         const foodEl = document.createElement("li")
         const foodPriceEl = document.createElement("span")
         // RENDERS THE VALUES IN THE ARRAY ON THE UI
